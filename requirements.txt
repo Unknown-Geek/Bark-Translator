@@ -3,3 +3,5 @@ transformers
 streamlit
 pyttsx3
 torch
+pillow
+sentencepiece
