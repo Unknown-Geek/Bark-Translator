@@ -4,18 +4,72 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Granny's Tales</title>
-    <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
+    <link rel="stylesheet" href="styles.css">
 </head>
-<body>
-    <div class="container">
-        <h1>Granny's Horror Tales</h1>
-        <form id="upload-form" enctype="multipart/form-data">
-            <input type="file" id="image" name="image" accept="image/*" required>
-            <button type="submit">Generate Story</button>
-        </form>
-        <div id="story-container"></div>
-        <audio id="audio" controls></audio>
+<body class="light-theme">
+    <div class="theme-toggle">
+        <button id="theme-switch">
+            <span class="light-icon">🌞</span>
+            <span class="dark-icon">🌙</span>
+        </button>
     </div>
-    <script src="{{ url_for('static', filename='script.js') }}"></script>
+
+    <div class="main-container">
+        <div class="granny-overlay"></div>
+        <h1 class="title">Granny's Tales</h1>
+        
+        <div class="genre-grid">
+            <div class="genre-card horror" data-genre="horror">
+                <div class="genre-icon">👻</div>
+                <div class="genre-title">Horror</div>
+                <div class="genre-description">Spine-chilling tales that will keep you up at night</div>
+            </div>
+            
+            <div class="genre-card comedy" data-genre="comedy">
+                <div class="genre-icon">😂</div>
+                <div class="genre-title">Comedy</div>
+                <div class="genre-description">Hilarious stories that will make you laugh out loud</div>
+            </div>
+            
+            <div class="genre-card romance" data-genre="romance">
+                <div class="genre-icon">❤️</div>
+                <div class="genre-title">Romance</div>
+                <div class="genre-description">Sweet tales of love and relationships</div>
+            </div>
+            
+            <div class="genre-card fiction" data-genre="fiction">
+                <div class="genre-icon">📚</div>
+                <div class="genre-title">Fiction</div>
+                <div class="genre-description">Imaginative stories from everyday life</div>
+            </div>
+            
+            <div class="genre-card fantasy" data-genre="fantasy">
+                <div class="genre-icon">🧙‍♂️</div>
+                <div class="genre-title">Fantasy</div>
+                <div class="genre-description">Magical stories from enchanted realms</div>
+            </div>
+            
+            <div class="genre-card scifi" data-genre="scifi">
+                <div class="genre-icon">🚀</div>
+                <div class="genre-title">Sci-Fi</div>
+                <div class="genre-description">Futuristic tales of science and adventure</div>
+            </div>
+        </div>
+
+        <div class="upload-container">
+            <form id="upload-form" enctype="multipart/form-data">
+                <div class="file-input-container">
+                    <label class="file-input-label">
+                        Choose Image
+                        <input type="file" id="image" name="image" accept="image/*" required>
+                    </label>
+                </div>
+                <button type="submit">Generate Story</button>
+            </form>
+            <div id="story-container"></div>
+            <audio id="audio" controls></audio>
+        </div>
+    </div>
+    <script src="script.js"></script>
 </body>
 </html>

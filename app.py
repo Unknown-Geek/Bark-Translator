@@ -41,7 +41,7 @@ def text_to_speech(text, output_path):
         engine.runAndWait()
         # Add a small delay to ensure file is written
         import time
-        time.sleep(0.5)
+        time.sleep(3)
     except Exception as e:
         logger.error(f"TTS Error: {str(e)}")
         raise
@@ -72,7 +72,7 @@ def generate_story():
             return jsonify({'status': 'error', 'message': 'Empty image file'}), 400
 
         temp_image_path = os.path.join('temp', f"temp_image_{os.getpid()}.jpg")
-        audio_path = os.path.join('output', f"story_{os.getpid()}.mp3")
+        audio_path = os.path.abspath(os.path.join('output', f"story_{os.getpid()}.mp3"))
         
         image.save(temp_image_path)
         logger.info(f"Image saved to {temp_image_path}")
@@ -94,12 +94,19 @@ def generate_story():
         text_to_speech(story, audio_path)
         logger.info(f"Audio saved to {audio_path}")
         
-        return jsonify({
-            'status': 'success',
-            'caption': spooky_prompt,
-            'story': story,
-            'audio': audio_path
-        })
+        if os.path.exists(audio_path):
+         return jsonify({
+        'status': 'success',
+        'caption': spooky_prompt,
+        'story': story,
+        'audio': audio_path
+           })
+        else:
+         return jsonify({
+        'status': 'error',
+        'message': 'Audio file generation failed'
+        }), 500
+        
         
     except Exception as e:
         logger.error(f"Error in story generation: {str(e)}")
@@ -125,3 +132,5 @@ def cleanup():
 
 if __name__ == '__main__':
     app.run(debug=True)
+
+    
