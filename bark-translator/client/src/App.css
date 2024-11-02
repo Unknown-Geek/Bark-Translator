@@ -179,7 +179,7 @@ p {
   letter-spacing: 0.3px;
   font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
   line-height: 1.7;
-  color: #222222;
+  color: #292929;
   margin-bottom: 1.5rem;
 }
 
@@ -214,6 +214,8 @@ p {
   cursor: pointer;
   transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
   box-shadow: 0 10px 20px rgba(238, 0, 0, 0.2);
+  position: relative;
+  left: 45.5%;
 }
 
 .record-button:hover {
