@@ -4,7 +4,7 @@ function Home() {
   return (
     <div>
       <h1>Welcome to Bark Translator</h1>
-      <p>Understand what your dog is saying!</p>
+      <h5>Understand what your dog is saying!</h5>
     </div>
   );
 }
