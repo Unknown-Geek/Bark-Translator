@@ -1,87 +1,76 @@
-// src/components/AudioVisualizer.jsx
+// components/AudioVisualizer.jsx
 import React, { useEffect, useRef } from 'react';
 
-const AudioVisualizer = ({ isRecording, audioStream }) => {
+const AudioVisualizer = ({ audioData }) => {
   const canvasRef = useRef(null);
-  const animationFrameId = useRef(null);
-  const analyserRef = useRef(null);
-  const dataArrayRef = useRef(null);
+  const audioContext = useRef(null);
+  const analyser = useRef(null);
 
   useEffect(() => {
-    if (!isRecording || !audioStream) return;
+    if (!audioData) return;
 
-    const audioContext = new (window.AudioContext || window.webkitAudioContext)();
-    const analyser = audioContext.createAnalyser();
-    const source = audioContext.createMediaStreamSource(audioStream);
+    const canvas = canvasRef.current;
+    const ctx = canvas.getContext('2d');
     
-    analyser.fftSize = 2048;
-    const bufferLength = analyser.frequencyBinCount;
+    audioContext.current = new (window.AudioContext || window.webkitAudioContext)();
+    analyser.current = audioContext.current.createAnalyser();
+    analyser.current.fftSize = 2048;
+
+    const bufferLength = analyser.current.frequencyBinCount;
     const dataArray = new Uint8Array(bufferLength);
-    
-    source.connect(analyser);
-    analyserRef.current = analyser;
-    dataArrayRef.current = dataArray;
+
+    const source = audioContext.current.createMediaElementSource(audioData);
+    source.connect(analyser.current);
+    analyser.current.connect(audioContext.current.destination);
 
     const draw = () => {
-      if (!isRecording) return;
-      
-      const canvas = canvasRef.current;
-      const ctx = canvas.getContext('2d');
-      const width = canvas.width;
-      const height = canvas.height;
+      requestAnimationFrame(draw);
 
-      analyser.getByteTimeDomainData(dataArray);
-      
-      ctx.fillStyle = 'rgb(255, 255, 255)';
-      ctx.fillRect(0, 0, width, height);
-      
+      analyser.current.getByteTimeDomainData(dataArray);
+
+      ctx.fillStyle = 'rgb(200, 200, 200)';
+      ctx.fillRect(0, 0, canvas.width, canvas.height);
+
       ctx.lineWidth = 2;
-      ctx.strokeStyle = '#8B5CF6';
+      ctx.strokeStyle = 'rgb(0, 0, 0)';
       ctx.beginPath();
-      
-      const sliceWidth = width / bufferLength;
+
+      const sliceWidth = canvas.width * 1.0 / bufferLength;
       let x = 0;
-      
+
       for (let i = 0; i < bufferLength; i++) {
         const v = dataArray[i] / 128.0;
-        const y = v * height / 2;
-        
+        const y = v * canvas.height / 2;
+
         if (i === 0) {
           ctx.moveTo(x, y);
         } else {
           ctx.lineTo(x, y);
         }
-        
+
         x += sliceWidth;
       }
-      
-      ctx.lineTo(width, height / 2);
+
+      ctx.lineTo(canvas.width, canvas.height / 2);
       ctx.stroke();
-      
-      animationFrameId.current = requestAnimationFrame(draw);
     };
 
     draw();
 
     return () => {
-      if (animationFrameId.current) {
-        cancelAnimationFrame(animationFrameId.current);
-      }
-      if (audioContext.state !== 'closed') {
-        audioContext.close();
+      if (audioContext.current) {
+        audioContext.current.close();
       }
     };
-  }, [isRecording, audioStream]);
+  }, [audioData]);
 
   return (
-    <div className="visualizer-container">
-      <canvas
-        ref={canvasRef}
-        width="300"
-        height="100"
-        className="audio-visualizer"
-      />
-    </div>
+    <canvas 
+      ref={canvasRef} 
+      className="audio-visualizer"
+      width="800"
+      height="200"
+    />
   );
 };
 
