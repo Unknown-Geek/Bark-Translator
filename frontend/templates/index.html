@@ -3,30 +3,80 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Granny's Horror Tales</title>
-    <link rel="stylesheet" href="{{ url_for('static', filename='css/styles.css') }}">
+    <title>Tale Spinner - Multi-Genre Story Generator</title>
+    <!-- Font Awesome -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
 </head>
 <body>
     <div class="container">
-        <h1>👵 Granny's Horror Tales</h1>
-        
-        <form id="upload-form" enctype="multipart/form-data">
-            <div class="upload-section">
-                <label for="image">Upload an image to generate a spooky story...</label>
-                <input type="file" id="image" name="image" accept="image/jpeg,image/png,image/jpg" required>
-                <button type="submit">Generate Story</button>
+        <h1>
+            <span class="magic-text">Tale Spinner</span>
+            <div class="subtitle">AI-Powered Story Generator</div>
+        </h1>
+
+        <form id="upload-form" class="upload-section">
+            <div class="genre-selector">
+                <div class="genre-card" data-genre="horror">
+                    <i class="fas fa-ghost"></i>
+                    <span>Horror</span>
+                </div>
+                <div class="genre-card" data-genre="fantasy">
+                    <i class="fas fa-dragon"></i>
+                    <span>Fantasy</span>
+                </div>
+                <div class="genre-card" data-genre="scifi">
+                    <i class="fas fa-robot"></i>
+                    <span>Sci-Fi</span>
+                </div>
+                <div class="genre-card" data-genre="romance">
+                    <i class="fas fa-heart"></i>
+                    <span>Romance</span>
+                </div>
+                <div class="genre-card" data-genre="mystery">
+                    <i class="fas fa-magnifying-glass"></i>
+                    <span>Mystery</span>
+                </div>
             </div>
+
+            <div class="file-upload-container">
+                <label for="image" class="file-upload-label">
+                    <i class="fas fa-cloud-upload-alt"></i>
+                    <span>Upload an image to generate your story...</span>
+                </label>
+                <input type="file" id="image" accept="image/*" hidden>
+            </div>
+
+            <button type="submit" class="generate-btn">
+                <i class="fas fa-wand-magic-sparkles"></i>
+                Generate Story
+            </button>
         </form>
 
         <div id="image-preview"></div>
-        <div id="loading" style="display: none;">
-            Granny is analyzing the image and crafting a spooky tale...
+
+        <div id="loading" class="loading-container" style="display: none;">
+            <div class="loading-content">
+                <div class="spinner"></div>
+                <div class="loading-text">
+                    <div class="messages">
+                        <span>Analyzing your image...</span>
+                        <span>Crafting your tale...</span>
+                        <span>Adding magical details...</span>
+                        <span>Almost ready...</span>
+                    </div>
+                </div>
+            </div>
         </div>
+
         <div id="caption"></div>
         <div id="story-container"></div>
         <audio id="story-audio" controls style="display: none;"></audio>
     </div>
 
-    <script src="{{ url_for('static', filename='js/script.js') }}"></script>
+    <!-- Custom JavaScript -->
+    <script src="{{ url_for('static', filename='script.js') }}"></script>
 </body>
 </html>
+
