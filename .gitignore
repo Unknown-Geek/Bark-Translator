@@ -1,7 +1,4 @@
-/venv
-/models
-*.bin
-/temp
-/output
-/models
-activate.sh
+venv/
+__pycache__/
+*.pyc
+.env
