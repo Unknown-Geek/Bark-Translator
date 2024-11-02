@@ -13,3 +13,6 @@ torch
 sentencepiece
 certifi==2024.8.30
 ipykernel
+gTTS
+pydub
+ffmpeg-python
