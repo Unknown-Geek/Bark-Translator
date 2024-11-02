@@ -3,80 +3,80 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Tale Spinner - Multi-Genre Story Generator</title>
-    <!-- Font Awesome -->
-    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
-    <!-- Custom CSS -->
-    <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
+    <title>Tale Spinner - AI Story Generator</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/styles.css') }}">
 </head>
 <body>
-    <div class="container">
-        <h1>
-            <span class="magic-text">Tale Spinner</span>
-            <div class="subtitle">AI-Powered Story Generator</div>
-        </h1>
+    <div class="page-container">
+        <main class="container">
+            <header class="app-header">
+                <h1 class="magic-text">Tale Spinner</h1>
+                <p class="subtitle">Transform Your Images into Magical Stories</p>
+            </header>
 
-        <form id="upload-form" class="upload-section">
-            <div class="genre-selector">
-                <div class="genre-card" data-genre="horror">
-                    <i class="fas fa-ghost"></i>
-                    <span>Horror</span>
-                </div>
-                <div class="genre-card" data-genre="fantasy">
-                    <i class="fas fa-dragon"></i>
-                    <span>Fantasy</span>
-                </div>
-                <div class="genre-card" data-genre="scifi">
-                    <i class="fas fa-robot"></i>
-                    <span>Sci-Fi</span>
-                </div>
-                <div class="genre-card" data-genre="romance">
-                    <i class="fas fa-heart"></i>
-                    <span>Romance</span>
-                </div>
-                <div class="genre-card" data-genre="mystery">
-                    <i class="fas fa-magnifying-glass"></i>
-                    <span>Mystery</span>
-                </div>
-            </div>
+            <form id="upload-form" class="story-form">
+                <section class="genre-section">
+                    <h2 class="section-title">Choose Your Genre</h2>
+                    <div class="genre-selector">
+                        <div class="genre-card" data-genre="horror">
+                            <i class="fas fa-ghost"></i>
+                            <span>Horror</span>
+                        </div>
+                        <div class="genre-card" data-genre="fantasy">
+                            <i class="fas fa-dragon"></i>
+                            <span>Fantasy</span>
+                        </div>
+                        <div class="genre-card" data-genre="scifi">
+                            <i class="fas fa-robot"></i>
+                            <span>Sci-Fi</span>
+                        </div>
+                        <div class="genre-card" data-genre="romance">
+                            <i class="fas fa-heart"></i>
+                            <span>Romance</span>
+                        </div>
+                        <div class="genre-card" data-genre="mystery">
+                            <i class="fas fa-magnifying-glass"></i>
+                            <span>Mystery</span>
+                        </div>
+                    </div>
+                </section>
 
-            <div class="file-upload-container">
-                <label for="image" class="file-upload-label">
-                    <i class="fas fa-cloud-upload-alt"></i>
-                    <span>Upload an image to generate your story...</span>
-                </label>
-                <input type="file" id="image" accept="image/*" hidden>
-            </div>
+                <section class="upload-section">
+                    <h2 class="section-title">Upload Your Image</h2>
+                    <div class="file-upload-container">
+                        <label for="image" class="file-upload-label">
+                            <i class="fas fa-cloud-upload-alt"></i>
+                            <span class="upload-text">Drag & drop your image or click to browse</span>
+                            <span class="upload-hint">Supported formats: JPG, PNG (Max 5MB)</span>
+                        </label>
+                        <input type="file" id="image" name="image" accept="image/*" class="file-input" hidden>
+                    </div>
+                    <div id="image-preview" class="image-preview"></div>
+                </section>
 
-            <button type="submit" class="generate-btn">
-                <i class="fas fa-wand-magic-sparkles"></i>
-                Generate Story
-            </button>
-        </form>
+                <button type="submit" class="generate-btn">
+                    <i class="fas fa-wand-magic-sparkles"></i>
+                    Generate Story
+                </button>
+            </form>
 
-        <div id="image-preview"></div>
-
-        <div id="loading" class="loading-container" style="display: none;">
-            <div class="loading-content">
-                <div class="spinner"></div>
-                <div class="loading-text">
-                    <div class="messages">
-                        <span>Analyzing your image...</span>
-                        <span>Crafting your tale...</span>
-                        <span>Adding magical details...</span>
-                        <span>Almost ready...</span>
+            <div id="loading" class="loading-container" style="display: none;">
+                <div class="loading-content">
+                    <div class="spinner"></div>
+                    <div class="loading-text">
+                        <div class="messages"></div>
                     </div>
                 </div>
             </div>
-        </div>
 
-        <div id="caption"></div>
-        <div id="story-container"></div>
-        <audio id="story-audio" controls style="display: none;"></audio>
+            <section class="results-section">
+                <div id="caption" class="caption-container"></div>
+                <div id="story-container" class="story-container"></div>
+                <audio id="story-audio" controls style="display: none;"></audio>
+            </section>
+        </main>
     </div>
-
-    <!-- Custom JavaScript -->
-    <script src="{{ url_for('static', filename='script.js') }}"></script>
+    <script src="{{ url_for('static', filename='js/script.js') }}"></script>
 </body>
 </html>
-
