@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pawsome Translator</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css" rel="stylesheet">
+    <link href="style.css" rel="stylesheet">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
+</head>
+<body class="bg-gradient">
+    <div class="container">
+        <!-- Dog Character -->
+        <div class="dog-container">
+            <div class="dog">
+                <div class="dog-body">
+                    <div class="dog-head">
+                        <div class="dog-ears"></div>
+                        <div class="dog-eyes"></div>
+                        <div class="dog-nose"></div>
+                        <div class="dog-mouth"></div>
+                    </div>
+                    <div class="dog-tail"></div>
+                </div>
+            </div>
+            <div class="thought-bubble hidden">
+                <p id="translatedText">Woof! (Translation loading...)</p>
+            </div>
+        </div>
+
+        <!-- Main Card -->
+        <div class="glass-card">
+            <h1 class="title">🐾 Pawsome Translator 🐾</h1>
+            <p class="subtitle">Let me tell you what your furry friend is saying!</p>
+
+            <!-- Recording Section -->
+            <div class="controls-container">
+                <button id="recordBtn" class="control-btn record">
+                    <i class="fas fa-microphone"></i>
+                    <span>Record Bark</span>
+                </button>
+                
+                <div class="divider">OR</div>
+
+                <label class="control-btn upload" for="audioFile">
+                    <i class="fas fa-upload"></i>
+                    <span>Upload Audio</span>
+                </label>
+                <input type="file" id="audioFile" accept="audio/*" hidden>
+            </div>
+
+            <!-- Audio Visualization -->
+            <div class="audio-visualizer">
+                <canvas id="visualizer" height="60"></canvas>
+            </div>
+
+            <!-- Translation History -->
+            <div class="history-container">
+                <h3>Recent Translations</h3>
+                <div class="history-list" id="historyList">
+                    <!-- History items will be added here -->
+                </div>
+            </div>
+        </div>
+    </div>
+    <script src="script.js"></script>
+</body>
+</html>
