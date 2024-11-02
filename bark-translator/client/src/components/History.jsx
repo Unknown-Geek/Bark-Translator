@@ -6,36 +6,20 @@ import { faPaw, faTrash, faPlay, faPause } from '@fortawesome/free-solid-svg-ico
 const History = () => {
   const [translations, setTranslations] = useState([]);
   const [playing, setPlaying] = useState(null);
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState(null);
 
   useEffect(() => {
     fetchTranslationHistory();
   }, []);
 
-  const fetchTranslationHistory = async () => {
-    try {
-      setLoading(true);
-      const response = await fetch('http://localhost:3000/api/history');
-      const data = await response.json();
-      setTranslations(data);
-    } catch (error) {
-      setError('Failed to load translation history');
-      console.error('Error fetching history:', error);
-    } finally {
-      setLoading(false);
-    }
+  const fetchTranslationHistory = () => {
+    const savedTranslations = JSON.parse(localStorage.getItem('translations')) || [];
+    setTranslations(savedTranslations);
   };
 
-  const deleteTranslation = async (id) => {
-    try {
-      await fetch(`http://localhost:3000/api/history/${id}`, {
-        method: 'DELETE',
-      });
-      setTranslations(translations.filter(item => item._id !== id));
-    } catch (error) {
-      console.error('Error deleting translation:', error);
-    }
+  const deleteTranslation = (id) => {
+    const updatedTranslations = translations.filter(item => item.id !== id);
+    setTranslations(updatedTranslations);
+    localStorage.setItem('translations', JSON.stringify(updatedTranslations));
   };
 
   const playAudio = (audioUrl, id) => {
@@ -50,24 +34,6 @@ const History = () => {
       audio.onended = () => setPlaying(null);
     }
   };
-
-  if (loading) {
-    return (
-      <div className="history-loading">
-        <div className="spinner"></div>
-        <p>Loading translation history...</p>
-      </div>
-    );
-  }
-
-  if (error) {
-    return (
-      <div className="history-error">
-        <p>{error}</p>
-        <button onClick={fetchTranslationHistory}>Try Again</button>
-      </div>
-    );
-  }
 
   return (
     <div className="history-container">
@@ -84,7 +50,7 @@ const History = () => {
       ) : (
         <div className="history-list">
           {translations.map((item) => (
-            <div key={item._id} className="history-item">
+            <div key={item.id} className="history-item">
               <div className="history-item-content">
                 <div className="history-item-icon">
                   <FontAwesomeIcon icon={faPaw} />
@@ -92,7 +58,7 @@ const History = () => {
                 
                 <div className="history-item-details">
                   <div className="translation-text">
-                    {item.translation}
+                    {item.text}
                   </div>
                   
                   <div className="translation-meta">
@@ -115,14 +81,14 @@ const History = () => {
                 <div className="history-item-actions">
                   <button 
                     className="action-button play"
-                    onClick={() => playAudio(item.audioUrl, item._id)}
+                    onClick={() => playAudio(item.audioUrl, item.id)}
                   >
-                    <FontAwesomeIcon icon={playing === item._id ? faPause : faPlay} />
+                    <FontAwesomeIcon icon={playing === item.id ? faPause : faPlay} />
                   </button>
                   
                   <button 
                     className="action-button delete"
-                    onClick={() => deleteTranslation(item._id)}
+                    onClick={() => deleteTranslation(item.id)}
                   >
                     <FontAwesomeIcon icon={faTrash} />
                   </button>

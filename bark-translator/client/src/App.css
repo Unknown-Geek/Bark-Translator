@@ -1592,3 +1592,139 @@ h3 {
 .hungry { color: #10b981; }
 .alert { color: #3b82f6; }
 .playful { color: #8b5cf6; }
+
+/* History.css */
+.history-container {
+  max-width: 800px;
+  margin: 2rem auto;
+  padding: 0 1rem;
+}
+
+.history-header {
+  text-align: center;
+  margin-bottom: 2rem;
+}
+
+.history-header h2 {
+  color: #4a5568;
+  font-size: 2rem;
+  margin-bottom: 0.5rem;
+}
+
+.history-header p {
+  color: #718096;
+}
+
+.no-history {
+  text-align: center;
+  padding: 3rem;
+  background: white;
+  border-radius: 1rem;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+.no-history svg {
+  color: #cbd5e0;
+  margin-bottom: 1rem;
+}
+
+.no-history p {
+  color: #718096;
+}
+
+.history-list {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.history-item {
+  background: white;
+  border-radius: 1rem;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  transition: transform 0.2s ease;
+}
+
+.history-item:hover {
+  transform: translateY(-2px);
+}
+
+.history-item-content {
+  display: flex;
+  align-items: center;
+  padding: 1.5rem;
+  gap: 1rem;
+}
+
+.history-item-icon {
+  color: #8b5cf6;
+  font-size: 1.5rem;
+}
+
+.history-item-details {
+  flex: 1;
+}
+
+.translation-text {
+  font-size: 1.1rem;
+  color: #4a5568;
+  margin-bottom: 0.5rem;
+}
+
+.translation-meta {
+  display: flex;
+  gap: 1rem;
+  color: #718096;
+  font-size: 0.9rem;
+  margin-bottom: 0.5rem;
+}
+.confidence-meter {
+  height: 4px;
+  background: #e2e8f0;
+  border-radius: 2px;
+  overflow: hidden;
+}
+
+.confidence-bar {
+  height: 100%;
+  background: #8b5cf6;
+  transition: width 0.3s ease;
+}
+
+.history-item-actions {
+  display: flex;
+  gap: 0.5rem;
+}
+
+.action-button {
+  background: none;
+  border: none;
+  cursor: pointer;
+  font-size: 1rem;
+  color: #718096;
+  transition: color 0.2s ease;
+}
+
+.action-button:hover {
+  color: #4a5568;
+}
+
+.action-button.play:hover {
+  color: #3b82f6;
+}
+
+.action-button.delete:hover {
+  color: #ef4444;
+}
+
+@media (max-width: 640px) {
+  .history-item-content {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .history-item-actions {
+    align-self: flex-end;
+    margin-top: 1rem;
+  }
+}

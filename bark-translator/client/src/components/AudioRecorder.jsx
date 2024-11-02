@@ -4,10 +4,26 @@ import React, { useState, useRef, useEffect } from 'react';
 const AudioRecorder = ({ onTranslate }) => {
   const [isRecording, setIsRecording] = useState(false);
   const [interpretation, setInterpretation] = useState('');
+  const [audioSrc, setAudioSrc] = useState(null);
   const mediaRecorder = useRef(null);
   const audioContext = useRef(null);
   const analyser = useRef(null);
-  const audioData = useRef([]);
+  const audioChunks = useRef([]);
+
+  // Add the analyzeBark function
+  const analyzeBark = (dataArray) => {
+    // Calculate average frequency
+    const average = dataArray.reduce((a, b) => a + b, 0) / dataArray.length;
+    
+    // Simple interpretation based on frequency intensity
+    if (average < 50) {
+      return "Quiet bark - might be a gentle request";
+    } else if (average < 100) {
+      return "Medium bark - trying to get attention";
+    } else {
+      return "Loud bark - something exciting or urgent!";
+    }
+  };
 
   useEffect(() => {
     // Initialize Audio Context
@@ -16,28 +32,11 @@ const AudioRecorder = ({ onTranslate }) => {
     analyser.current.fftSize = 2048;
   }, []);
 
-  const analyzeBark = (frequencyData) => {
-    // Get average frequency
-    const average = frequencyData.reduce((a, b) => a + b) / frequencyData.length;
-    
-    // Define frequency thresholds for different interpretations
-    if (average > 2000) {
-      return "Alert! Your dog seems scared or detecting danger!";
-    } else if (average > 1500) {
-      return "Your dog is excited or trying to get attention!";
-    } else if (average > 1000) {
-      return "Your dog is probably hungry or wants food!";
-    } else if (average > 500) {
-      return "Your dog is relaxed and making casual communication.";
-    } else {
-      return "Your dog is calm or tired.";
-    }
-  };
-
   const startRecording = async () => {
     try {
       const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
       mediaRecorder.current = new MediaRecorder(stream);
+      audioChunks.current = []; // Reset chunks
       
       // Connect to audio analyzer
       const source = audioContext.current.createMediaStreamSource(stream);
@@ -46,13 +45,15 @@ const AudioRecorder = ({ onTranslate }) => {
       const dataArray = new Uint8Array(analyser.current.frequencyBinCount);
       
       mediaRecorder.current.ondataavailable = (event) => {
-        audioData.current.push(event.data);
+        audioChunks.current.push(event.data);
       };
 
       mediaRecorder.current.onstop = () => {
-        const audioBlob = new Blob(audioData.current, { type: 'audio/wav' });
-        onTranslate(audioBlob);
-        audioData.current = [];
+        const audioBlob = new Blob(audioChunks.current, { type: 'audio/wav' });
+        const audioUrl = URL.createObjectURL(audioBlob);
+        setAudioSrc(audioUrl);
+        onTranslate(audioUrl, 'record');
+        audioChunks.current = []; // Clear chunks after processing
       };
 
       // Start frequency analysis
@@ -94,6 +95,10 @@ const AudioRecorder = ({ onTranslate }) => {
           <h3>Real-time Interpretation:</h3>
           <p>{interpretation}</p>
         </div>
+      )}
+
+      {audioSrc && (
+        <audio src={audioSrc} controls className="audio-preview" />
       )}
     </div>
   );

@@ -4,6 +4,7 @@ import React, { useState } from 'react';
 const AudioUploader = ({ onUpload }) => {
   const [dragActive, setDragActive] = useState(false);
   const [selectedFile, setSelectedFile] = useState(null);
+  const [audioSrc, setAudioSrc] = useState(null); // Add this line
 
   const handleDrag = (e) => {
     e.preventDefault();
@@ -23,7 +24,9 @@ const AudioUploader = ({ onUpload }) => {
     const file = e.dataTransfer.files[0];
     if (file && file.type.startsWith('audio/')) {
       setSelectedFile(file);
-      onUpload(file);
+      const audioUrl = URL.createObjectURL(file);
+      setAudioSrc(audioUrl);
+      onUpload(audioUrl, 'upload');
     }
   };
 
@@ -31,7 +34,9 @@ const AudioUploader = ({ onUpload }) => {
     const file = e.target.files[0];
     if (file && file.type.startsWith('audio/')) {
       setSelectedFile(file);
-      onUpload(file);
+      const audioUrl = URL.createObjectURL(file);
+      setAudioSrc(audioUrl);
+      onUpload(audioUrl, 'upload');
     }
   };
 
@@ -61,6 +66,10 @@ const AudioUploader = ({ onUpload }) => {
           </div>
         </label>
       </div>
+
+      {audioSrc && (
+        <audio src={audioSrc} controls className="audio-preview" />
+      )}
     </div>
   );
 };
