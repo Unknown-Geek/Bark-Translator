@@ -2,6 +2,10 @@ import streamlit as st
 import requests
 from PIL import Image
 import io
+import urllib3
+
+# Disable SSL warnings
+urllib3.disable_warnings(urllib3.exceptions.InsecureRequestWarning)
 
 st.set_page_config(page_title="Granny's Horror Tales", page_icon="👵")
 
@@ -25,10 +29,14 @@ st.markdown("""
 
 st.title("👵 Granny's Horror Tales")
 
-# Add server status indicator
+# Add server status indicator with SSL handling
 st.sidebar.markdown("### Server Status")
 try:
-    response = requests.get("https://a5b4-34-169-122-61.ngrok-free.app/")
+    response = requests.get(
+        "https://bc43-34-126-82-62.ngrok-free.app/",
+        verify=False,
+        timeout=10
+    )
     st.sidebar.success("✅ Connected to AI Server")
 except:
     st.sidebar.error("❌ AI Server Unavailable")

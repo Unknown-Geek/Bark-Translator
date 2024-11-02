@@ -10,6 +10,7 @@ import io
 from requests.adapters import HTTPAdapter
 from urllib3.util.retry import Retry
 import urllib3
+import ssl
 
 # Disable SSL verification warnings
 urllib3.disable_warnings(urllib3.exceptions.InsecureRequestWarning)
@@ -25,9 +26,8 @@ logger = logging.getLogger(__name__)
 os.makedirs('temp', exist_ok=True)
 os.makedirs('output', exist_ok=True)
 
-# Update API URL configuration
-COLAB_API_URL = "https://a5b4-34-169-122-61.ngrok-free.app/generate_story"  # Production with ngrok
-# COLAB_API_URL = "http://127.0.0.1:5000/generate_story"  # Local development (commented out)
+# Update API URL to use HTTP instead of HTTPS
+COLAB_API_URL = "http://7852-34-126-82-62.ngrok-free.app/generate_story"  # Changed to HTTP
 
 # Global engine variable
 engine = None
@@ -46,15 +46,15 @@ def init_engine():
         raise
 
 def create_session_with_retries():
-    """Create requests session with retries"""
+    """Create requests session with simplified retry strategy"""
     session = requests.Session()
-    retry_strategy = Retry(
-        total=5,
-        backoff_factor=0.5,
+    retry = Retry(
+        total=3,
+        backoff_factor=1,
         status_forcelist=[429, 500, 502, 503, 504],
+        allowed_methods=["HEAD", "GET", "POST", "OPTIONS"]
     )
-    adapter = HTTPAdapter(max_retries=retry_strategy)
-    session.mount("https://", adapter)
+    adapter = HTTPAdapter(max_retries=retry)
     session.mount("http://", adapter)
     return session
 
@@ -65,18 +65,22 @@ def process_image_with_colab(image_path):
         with open(image_path, 'rb') as img_file:
             files = {'image': ('image.jpg', img_file, 'image/jpeg')}
             
-            response = session.post(COLAB_API_URL, files=files, verify=False, timeout=30)
+            response = session.post(
+                COLAB_API_URL,
+                files=files,
+                headers={'Connection': 'close'},
+                timeout=30
+            )
+            
+            logger.debug(f"Response status: {response.status_code}")
+            logger.debug(f"Response URL: {response.url}")
+            
             response.raise_for_status()
+            return response.json()
             
-            data = response.json()
-            if data.get('status') == 'error':
-                raise Exception(data.get('message', 'Unknown error from Colab'))
-                
-            return data
-            
-    except requests.exceptions.RequestException as e:
+    except Exception as e:
         logger.error(f"Colab API Error: {str(e)}")
-        raise Exception(f"Failed to connect to Colab API: {str(e)}")
+        raise
 
 @app.route('/generate_story', methods=['POST'])
 def generate_story():
